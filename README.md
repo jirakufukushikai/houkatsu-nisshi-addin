@@ -5,6 +5,7 @@ Outlook の予定の作成画面に「業務日誌 入力補助（包括）」�
 
 - 使える: Outlook on the web、新しい Outlook（Windows・Mac）、従来の Outlook（Windows・Mac）
 - 使えない: スマホの Outlook（予定作成画面のアドインに非対応。スマホでは手入力）
+- 使えない: Teams の予定表（作成画面が Outlook アドインに非対応）。Outlook で作れば Teams の予定表にも出る。Teams で作った予定も Outlook で開き直せば使える。Teams で直接作るときは手入力
 - 費用: なし（画面は GitHub Pages に置く。配布は Microsoft 365 管理センター）
 
 ## 中身
