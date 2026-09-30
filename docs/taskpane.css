@@ -1,0 +1,71 @@
+/* 色覚に配慮して青とオレンジだけを使う */
+:root {
+  --bg: #ffffff;
+  --fg: #1b1b1b;
+  --muted: #555555;
+  --line: #c8c8c8;
+  --accent: #1f4e79;
+  --accent-fg: #ffffff;
+  --warn: #b35400;
+  --warn-bg: #fff4e5;
+  --preview-bg: #eef4fa;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Yu Gothic UI", "Hiragino Sans", "Meiryo", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+main { padding: 12px 14px 20px; }
+h1 { font-size: 16px; color: var(--accent); margin: 0 0 4px; }
+.lead { margin: 0 0 12px; color: var(--muted); font-size: 12.5px; }
+label { display: block; font-weight: 600; margin: 10px 0 4px; }
+label.check { font-weight: 600; display: flex; align-items: center; gap: 6px; }
+select, input[type=text] {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  background: #fff;
+  color: var(--fg);
+}
+select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field[hidden] { display: none; }
+.preview {
+  margin-top: 16px;
+  padding: 10px;
+  background: var(--preview-bg);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+}
+.preview-label { font-size: 11.5px; color: var(--muted); }
+.preview-subject { font-weight: 700; word-break: break-all; margin-bottom: 6px; }
+.preview-body { white-space: pre-line; }
+.errors {
+  margin: 10px 0 0;
+  padding: 8px 10px 8px 26px;
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-radius: 4px;
+  font-size: 13px;
+}
+button {
+  margin-top: 14px;
+  width: 100%;
+  padding: 9px;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.45; cursor: default; }
+.status { min-height: 1.5em; margin: 8px 0 0; font-size: 13px; color: var(--accent); }
+.status.warn { color: var(--warn); }
+.note { margin-top: 14px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }

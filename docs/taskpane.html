@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>業務日誌 入力補助</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="stylesheet" href="taskpane.css">
+</head>
+<body>
+  <main>
+    <h1>業務日誌の入力補助</h1>
+    <p class="lead">種別を選んで入力すると、業務日誌に自動で載る形の件名・本文にします。</p>
+
+    <label for="type">種別</label>
+    <select id="type"></select>
+
+    <div class="field" data-field="person">
+      <label for="person">利用者名</label>
+      <input id="person" type="text" placeholder="例：山田花子（「様」は自動で付きます）">
+    </div>
+    <div class="field" data-field="core">
+      <label class="check"><input id="core" type="checkbox"> コア会議</label>
+    </div>
+    <div class="field" data-field="office">
+      <label for="office">事業所名（会議を開く機関）</label>
+      <input id="office" type="text" placeholder="例：居宅中野">
+    </div>
+    <div class="field" data-field="meeting">
+      <label for="meeting">会議名</label>
+      <input id="meeting" type="text" placeholder="例：事例検討会">
+    </div>
+    <div class="field" data-field="count">
+      <label for="count">参加者数（わかれば）</label>
+      <input id="count" type="text" inputmode="numeric" placeholder="例：18">
+    </div>
+    <div class="field" data-field="external">
+      <label for="external">外部参加者（団体名）</label>
+      <input id="external" type="text" placeholder="例：支えあい課・安芸区社協">
+    </div>
+
+    <section class="preview" aria-live="polite">
+      <div class="preview-label">件名</div>
+      <div id="previewSubject" class="preview-subject">―</div>
+      <div id="previewBodyWrap" hidden>
+        <div class="preview-label">本文の先頭に入る内容</div>
+        <div id="previewBody" class="preview-body"></div>
+      </div>
+    </section>
+
+    <ul id="errors" class="errors" hidden></ul>
+
+    <button id="apply" type="button">件名と本文に入れる</button>
+    <p id="status" class="status" role="status"></p>
+
+    <p class="note">一緒に出る包括の職員は、予定の「参加者」（出席者）に入れてください。業務日誌の包括職員の欄はそこから決まります。</p>
+  </main>
+  <script src="rules.js"></script>
+  <script src="taskpane.js"></script>
+</body>
+</html>
