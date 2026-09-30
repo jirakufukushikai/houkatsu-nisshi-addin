@@ -9,7 +9,7 @@
   <Version>{{VERSION}}</Version>
   <ProviderName>社会福祉法人 慈楽福祉会</ProviderName>
   <DefaultLocale>ja-JP</DefaultLocale>
-  <DisplayName DefaultValue="業務日誌 入力補助"/>
+  <DisplayName DefaultValue="業務日誌 入力補助（包括）"/>
   <Description DefaultValue="予定の件名と本文を、地域包括の業務日誌の自動記入ルール（件名の先頭に【種別】）に合わせて入力します。"/>
   <IconUrl DefaultValue="{{BASE}}/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="{{BASE}}/assets/icon-128.png"/>
@@ -83,7 +83,7 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="業務日誌"/>
-        <bt:String id="ButtonLabel" DefaultValue="業務日誌の入力補助"/>
+        <bt:String id="ButtonLabel" DefaultValue="業務日誌 入力補助（包括）"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="ButtonTip" DefaultValue="件名の先頭に【種別】を付けるなど、業務日誌に自動で載る形で件名と本文を入力します。"/>
