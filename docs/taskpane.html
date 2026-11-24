@@ -10,10 +10,20 @@
 <body>
   <main>
     <h1>業務日誌 入力補助（包括）</h1>
-    <p class="lead">種別を選んで入力すると、業務日誌に自動で載る形の件名・本文にします。</p>
+    <p class="lead">主催・参加と種別を選んで入力すると、業務日誌に自動で載る形の件名・本文にします。</p>
 
-    <label for="type">種別</label>
-    <select id="type"></select>
+    <div class="role">
+      <span class="label">主催・参加</span>
+      <div class="radios" role="radiogroup" aria-label="主催・参加">
+        <label class="check"><input type="radio" name="role" id="roleHost" value="主催" checked> 主催</label>
+        <label class="check"><input type="radio" name="role" id="roleJoin" value="参加"> 参加</label>
+      </div>
+    </div>
+
+    <div id="typeWrap">
+      <label for="type">種別</label>
+      <select id="type"></select>
+    </div>
 
     <div class="field" data-field="person">
       <label for="person">利用者名</label>

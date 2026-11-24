@@ -24,6 +24,10 @@ h1 { font-size: 16px; color: var(--accent); margin: 0 0 4px; }
 .lead { margin: 0 0 12px; color: var(--muted); font-size: 12.5px; }
 label { display: block; font-weight: 600; margin: 10px 0 4px; }
 label.check { font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.label { display: block; font-weight: 600; margin: 10px 0 4px; }
+.radios { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.radios label.check { margin: 0; font-weight: 400; }
+#typeWrap[hidden] { display: none; }
 select, input[type=text] {
   width: 100%;
   padding: 7px 8px;

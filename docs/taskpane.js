@@ -6,9 +6,29 @@
 
   function item() { return Office.context.mailbox.item; }
 
+  function joining() { return $("roleJoin").checked; }
+  function currentType() { return $("type").value; }
+  // 種別の一覧: 参加のときは会議・研修会の種別だけ（サ担・処遇は主催のときだけ）
+  function fillTypes() {
+    var sel = $("type"), keep = sel.value, join = joining();
+    sel.innerHTML = "";
+    var opt0 = document.createElement("option");
+    opt0.value = ""; opt0.textContent = "選んでください";
+    sel.appendChild(opt0);
+    R.TYPES.forEach(function (t) {
+      if (t.legacy || (join && t.kind !== "kaigi")) return;
+      var o = document.createElement("option");
+      o.value = t.id; o.textContent = t.label;
+      sel.appendChild(o);
+    });
+    sel.value = keep;
+    if (sel.value !== keep) sel.value = "";
+  }
+
   function state() {
     return {
-      type: $("type").value,
+      type: currentType(),
+      role: joining() ? "参加" : "主催",
       person: $("person").value,
       core: $("core").checked,
       office: $("office").value,
@@ -19,8 +39,10 @@
   }
 
   function showFields() {
-    var t = R.findType($("type").value);
-    var show = t ? R.FIELDS[t.kind] : [];
+    var t = R.findType(currentType());
+    var show = t ? R.FIELDS[t.kind].slice() : [];
+    // 参加のときは人数を書かない（業務日誌の≪会議参加≫欄に参加者の列が無い）
+    if (joining()) show = show.filter(function (f) { return f !== "count"; });
     var fields = document.querySelectorAll(".field");
     for (var i = 0; i < fields.length; i++) {
       fields[i].hidden = show.indexOf(fields[i].getAttribute("data-field")) < 0;
@@ -81,17 +103,10 @@
   }
 
   function init() {
-    var sel = $("type");
-    var opt0 = document.createElement("option");
-    opt0.value = ""; opt0.textContent = "選んでください";
-    sel.appendChild(opt0);
-    R.TYPES.forEach(function (t) {
-      var o = document.createElement("option");
-      o.value = t.id; o.textContent = t.label;
-      sel.appendChild(o);
-    });
-    ["type", "person", "core", "office", "meeting", "count", "external"].forEach(function (id) {
-      $(id).addEventListener(id === "type" || id === "core" ? "change" : "input", render);
+    fillTypes();
+    ["roleHost", "roleJoin"].forEach(function (id) { $(id).addEventListener("change", fillTypes); });
+    ["type", "roleHost", "roleJoin", "person", "core", "office", "meeting", "count", "external"].forEach(function (id) {
+      $(id).addEventListener(id === "type" || id === "core" || id.indexOf("role") === 0 ? "change" : "input", render);
     });
     $("apply").addEventListener("click", apply);
     render();
@@ -100,6 +115,10 @@
   function prefill(subject) {
     var p = R.parse(subject);
     if (!p) return;
+    var join = p.role === "参加";
+    $("roleJoin").checked = join;
+    $("roleHost").checked = !join;
+    fillTypes();
     $("type").value = p.type;
     ["person", "office", "meeting"].forEach(function (k) { if (p[k] !== undefined) $(k).value = p[k]; });
     if (p.core !== undefined) $("core").checked = p.core;

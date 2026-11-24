@@ -5,14 +5,14 @@
 (function (root) {
   // 種別: 業務日誌のどの欄に入るか（kind）と、入力欄の組み合わせ
   var TYPES = [
-    { id: "研修会", tag: "研修会", kind: "kaigi", label: "研修会（主催）" },
-    { id: "地域ケア会議", tag: "地域ケア会議", kind: "kaigi", label: "地域ケア会議（主催）" },
-    { id: "多職種情報交換会", tag: "多職種情報交換会", kind: "kaigi", label: "多職種情報交換会（主催）" },
-    { id: "ケアマネ連絡会", tag: "ケアマネ連絡会", kind: "kaigi", label: "ケアマネ連絡会（主催）" },
-    { id: "その他会議", tag: "その他会議", kind: "kaigi", label: "その他会議（主催）" },
+    { id: "研修会", tag: "研修会", kind: "kaigi", label: "研修会" },
+    { id: "地域ケア会議", tag: "地域ケア会議", kind: "kaigi", label: "地域ケア会議" },
+    { id: "多職種情報交換会", tag: "多職種情報交換会", kind: "kaigi", label: "多職種情報交換会" },
+    { id: "ケアマネ連絡会", tag: "ケアマネ連絡会", kind: "kaigi", label: "ケアマネ連絡会" },
     { id: "サ担", tag: "サ担", kind: "tantou", label: "サービス担当者会議" },
     { id: "処遇", tag: "処遇", kind: "shogu", label: "処遇検討会（高齢者虐待）" },
-    { id: "会議参加", tag: "会議参加", kind: "sanka", label: "会議参加（他機関の会議）" }
+    { id: "その他会議", tag: "その他会議", kind: "kaigi", label: "その他会議" },
+    { id: "会議参加", tag: "会議参加", kind: "sanka", label: "会議参加（以前の書き方）", legacy: true }   // 以前の【会議参加】事業所名／会議名。読むだけで、種別の一覧には出さない
   ];
 
   // 種別ごとに表示する入力欄
@@ -55,8 +55,11 @@
     if (t.kind === "kaigi") {
       var meeting = clean(input.meeting);
       if (!meeting) errors.push("会議名を入れてください");
-      subject = "【" + t.tag + "】" + meeting;
-      if (count) lines.push("参加者：" + count);
+      // 主催・参加（既定は主催）。件名の後ろに（主催）か（参加）を付ける。参加は業務日誌の≪会議参加≫欄に入り、人数は書かない
+      var sanka = input.role === "参加";
+      meeting = meeting.replace(/\s*[（(]\s*(参加|主催)\s*[）)]\s*$/, "");
+      subject = "【" + t.tag + "】" + meeting + (sanka ? "（参加）" : "（主催）");
+      if (count && !sanka) lines.push("参加者：" + count);
     } else if (t.kind === "tantou") {
       var person = withSama(input.person);
       if (!person) errors.push("利用者名を入れてください");
@@ -91,13 +94,19 @@
     var t = findType(tag);
     if (!t) return null;
     var out = { type: t.id };
-    if (t.kind === "kaigi") out.meeting = rest;
+    if (t.kind === "kaigi") {
+      var sm = /^(.*?)\s*[（(]\s*(参加|主催)\s*[）)]\s*$/.exec(rest);
+      out.role = sm && sm[2] === "参加" ? "参加" : "主催";   // 何も付いていなければ主催
+      out.meeting = sm ? sm[1] : rest;
+    }
     if (t.kind === "tantou") out.person = rest;
     if (t.kind === "shogu") { out.person = rest.replace(/（コア会議）$/, ""); out.core = core; }
     if (t.kind === "sanka") {
       var parts = rest.split(/\s*[／/｜|]\s*/);
       out.office = parts.length > 1 ? parts[0] : "";
       out.meeting = parts.length > 1 ? parts.slice(1).join("／") : rest;
+      // 以前の書き方は「参加」として開き、種別は選び直してもらう（会議名は 事業所名＋会議名 を入れておく）
+      out = { type: "", role: "参加", meeting: (out.office ? out.office + " " : "") + out.meeting };
     }
     return out;
   }
